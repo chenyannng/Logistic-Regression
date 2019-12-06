@@ -10,14 +10,13 @@ class LogisticReg:
         row, col = data.shape
         # initialize theta
         theta0 = 0.001 * np.ones((col-1))
-        X = data[:, 0:col-1]
-        y = data[:, col-1]
+        X = data[:, 0:-1]
+        y = data[:, -1]
         self.X = X
         self.y = y
         self.theta_init = theta0
-        xopt, fopt, iter, funcalls, warnflag = optimize.fmin(func=self.loglikelihood, x0=self.theta_init,full_output=True)
-        print(xopt,fopt)
-        self.theta_fit = xopt
+        self.fit_maximum_ll()
+        
         
     @staticmethod
     def sigmoid(x):
@@ -38,8 +37,12 @@ class LogisticReg:
         
         return neg_log_ll
 
-
-       
+    def fit_maximum_ll(self):
+        xopt, fopt, iter, funcalls, warnflag = optimize.fmin(func=self.loglikelihood, x0=self.theta_init, full_output=True)
+        print('theta fitted:', xopt)
+        self.theta_fit = xopt
+        
+        
 
 
 
