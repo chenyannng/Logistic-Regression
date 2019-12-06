@@ -7,14 +7,10 @@ from scipy import optimize
 class LogisticReg:
 
     def __init__(self, data):
-        row, col = data.shape
-        # initialize theta
-        theta0 = 0.001 * np.ones((col-1))
         X = data[:, 0:-1]
         y = data[:, -1]
         self.X = X
         self.y = y
-        self.theta_init = theta0
         self.fit_maximum_ll()
         
         
@@ -37,8 +33,11 @@ class LogisticReg:
         
         return neg_log_ll
 
-    def fit_maximum_ll(self):
-        xopt, fopt, iter, funcalls, warnflag = optimize.fmin(func=self.loglikelihood, x0=self.theta_init, full_output=True)
+    def fit_maximum_ll(self, theta0=None):
+        # initialize theta      
+        if theta0 is None:
+            theta0 = 0.001 * np.ones(self.X.shape[1])
+        xopt, fopt, iter, funcalls, warnflag = optimize.fmin(func=self.loglikelihood, x0=theta0, full_output=True)
         print('theta fitted:', xopt)
         self.theta_fit = xopt
         
